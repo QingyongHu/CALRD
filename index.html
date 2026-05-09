@@ -40,6 +40,8 @@
 </head>
 <body>
 
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
 <div class="more-works-container">
   <button class="more-works-btn" id="moreWorksBtn" aria-expanded="false" aria-controls="moreWorksDropdown">
     <i class="fas fa-th-large" aria-hidden="true"></i>
@@ -62,14 +64,6 @@
       <div class="work-item-info">
         <strong>Efficient-HD</strong>
         <span>Efficient Hallucination Detection</span>
-      </div>
-    </a>
-
-    <a href="https://qingyonghu.github.io/CALRD/" class="work-item is-current" role="menuitem">
-      <span class="work-item-badge work-item-badge-ijcai">IJCAI</span>
-      <div class="work-item-info">
-        <strong>CALRD</strong>
-        <span>Correcting Late-Layer Textual Bias</span>
       </div>
     </a>
 
@@ -110,6 +104,10 @@
       <p class="venue-badge"><i class="fas fa-award" aria-hidden="true"></i> IJCAI-ECAI 2026</p>
       <h1>MLLMs Get It Right, Then Get It Wrong:<br />Tracing and Correcting Late-Layer Textual Bias</h1>
 
+      <p class="hero-subtitle">
+        CALRD pinpoints the layer where confident visual predictions get overwritten by text, then restores that signal at inference time without training.
+      </p>
+
       <p class="author-list">
         <a href="#authors">Xingming Li</a><sup>1</sup>,&nbsp;
         <a href="#authors">Ao Cheng</a><sup>1</sup>,&nbsp;
@@ -143,6 +141,24 @@
         <a class="pub-btn pub-btn-outline" href="#citation">
           <i class="fas fa-quote-right" aria-hidden="true"></i> BibTeX
         </a>
+      </div>
+
+      <div class="hero-signal" aria-label="CALRD layer transition summary">
+        <div class="signal-copy">
+          <span>Layer trajectory</span>
+          <strong>Vision signal survives, then gets overridden.</strong>
+        </div>
+        <div class="signal-track" aria-hidden="true">
+          <span class="signal-node node-vision">V</span>
+          <span class="signal-line"></span>
+          <span class="signal-node node-turn">T</span>
+          <span class="signal-line muted"></span>
+          <span class="signal-node node-final">Fix</span>
+        </div>
+        <div class="signal-metrics" aria-hidden="true">
+          <span>85% text-ward failures</span>
+          <span>89% vision-ward successes</span>
+        </div>
       </div>
     </div>
   </section>

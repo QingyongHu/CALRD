@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
   initBibtexCopy();
   initScrollTop();
   initDisabledButtons();
+  initScrollProgress();
+  initInteractiveSurfaces();
 });
 
 function initMoreWorks() {
@@ -206,6 +208,61 @@ function initDisabledButtons() {
   document.querySelectorAll("a.is-disabled").forEach(function (link) {
     link.addEventListener("click", function (event) {
       event.preventDefault();
+    });
+  });
+}
+
+function initScrollProgress() {
+  var bar = document.getElementById("scrollProgress");
+  if (!bar) return;
+
+  var update = function () {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var progress = max > 0 ? window.scrollY / max : 0;
+    bar.style.transform = "scaleX(" + Math.min(Math.max(progress, 0), 1) + ")";
+  };
+
+  update();
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
+}
+
+function initInteractiveSurfaces() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  var selector = [
+    ".info-card",
+    ".step-card",
+    ".metric-card",
+    ".gallery-card",
+    ".author-card",
+    ".contact-card",
+    ".paper-figure",
+    ".table-block",
+    ".abstract-box",
+    ".data-summary",
+    ".ablation-card",
+    ".formula-card"
+  ].join(",");
+
+  document.querySelectorAll(selector).forEach(function (surface) {
+    surface.classList.add("interactive-surface");
+
+    surface.addEventListener("pointermove", function (event) {
+      var rect = surface.getBoundingClientRect();
+      var x = (event.clientX - rect.left) / rect.width;
+      var y = (event.clientY - rect.top) / rect.height;
+      surface.style.setProperty("--mx", Math.round(x * 100) + "%");
+      surface.style.setProperty("--my", Math.round(y * 100) + "%");
+      surface.style.setProperty("--rx", ((0.5 - y) * 4).toFixed(2) + "deg");
+      surface.style.setProperty("--ry", ((x - 0.5) * 5).toFixed(2) + "deg");
+    });
+
+    surface.addEventListener("pointerleave", function () {
+      surface.style.removeProperty("--mx");
+      surface.style.removeProperty("--my");
+      surface.style.removeProperty("--rx");
+      surface.style.removeProperty("--ry");
     });
   });
 }
