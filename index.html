@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CALRD: Tracing and Correcting Late-Layer Textual Bias - IJCAI-ECAI 2026</title>
+  <meta name="description" content="CALRD is a training-free decoding method that traces and corrects late-layer textual override in multimodal large language models under visual-textual conflict." />
+  <meta name="keywords" content="CALRD, MLLM, multimodal knowledge conflict, textual bias, layer-wise decoding, IJCAI 2026" />
+  <meta name="author" content="Xingming Li, Ao Cheng, Qiyao Sun, Xixiang He, Xuanyu Ji, Runke Huang, Qingyong Hu" />
+  <meta property="og:title" content="CALRD - IJCAI-ECAI 2026" />
+  <meta property="og:description" content="MLLMs Get It Right, Then Get It Wrong: Tracing and Correcting Late-Layer Textual Bias." />
+  <meta property="og:image" content="static/images/figures/teaser.webp" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preload" as="image" href="static/images/figures/teaser.webp" fetchpriority="high" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="static/css/style.css" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "name": "MLLMs Get It Right, Then Get It Wrong: Tracing and Correcting Late-Layer Textual Bias",
+    "author": [
+      {"@type": "Person", "name": "Xingming Li"},
+      {"@type": "Person", "name": "Ao Cheng"},
+      {"@type": "Person", "name": "Qiyao Sun"},
+      {"@type": "Person", "name": "Xixiang He"},
+      {"@type": "Person", "name": "Xuanyu Ji"},
+      {"@type": "Person", "name": "Runke Huang"},
+      {"@type": "Person", "name": "Qingyong Hu"}
+    ],
+    "datePublished": "2026",
+    "publisher": {"@type": "Organization", "name": "IJCAI-ECAI"}
+  }
+  </script>
+</head>
+<body>
+
+<div class="more-works-container">
+  <button class="more-works-btn" id="moreWorksBtn" aria-expanded="false" aria-controls="moreWorksDropdown">
+    <i class="fas fa-th-large" aria-hidden="true"></i>
+    <span>More Works</span>
+    <i class="fas fa-chevron-down" aria-hidden="true"></i>
+  </button>
+  <div class="more-works-dropdown" id="moreWorksDropdown" role="menu">
+    <div class="dropdown-header">Our Group's Research</div>
+
+    <a href="https://qingyonghu.github.io/ENC-Bench/" target="_blank" rel="noopener" class="work-item" role="menuitem">
+      <span class="work-item-badge work-item-badge-cvpr">CVPR</span>
+      <div class="work-item-info">
+        <strong>ENC-Bench</strong>
+        <span>Evaluating MLLMs on Electronic Navigational Charts</span>
+      </div>
+    </a>
+
+    <a href="https://qingyonghu.github.io/Efficient-Hallucination-Detection/" target="_blank" rel="noopener" class="work-item" role="menuitem">
+      <span class="work-item-badge work-item-badge-aaai">AAAI</span>
+      <div class="work-item-info">
+        <strong>Efficient-HD</strong>
+        <span>Efficient Hallucination Detection</span>
+      </div>
+    </a>
+
+    <a href="https://qingyonghu.github.io/CALRD/" class="work-item is-current" role="menuitem">
+      <span class="work-item-badge work-item-badge-ijcai">IJCAI</span>
+      <div class="work-item-info">
+        <strong>CALRD</strong>
+        <span>Correcting Late-Layer Textual Bias</span>
+      </div>
+    </a>
+
+    <a href="https://qingyonghu.github.io/Interaction2Eval/" target="_blank" rel="noopener" class="work-item" role="menuitem">
+      <span class="work-item-badge work-item-badge-aied">AIED</span>
+      <div class="work-item-info">
+        <strong>Interaction2Eval</strong>
+        <span>Interaction-based Evaluation Framework</span>
+      </div>
+    </a>
+
+    <a href="https://github.com/qingyonghu" target="_blank" rel="noopener" class="work-item" role="menuitem">
+      <span class="work-item-badge work-item-badge-gh">GitHub</span>
+      <div class="work-item-info">
+        <strong>More Projects</strong>
+        <span>All publications and repositories</span>
+      </div>
+    </a>
+  </div>
+</div>
+
+<nav class="site-nav" aria-label="Project navigation">
+  <a class="nav-brand" href="#top">CALRD <span>@ IJCAI-ECAI 2026</span></a>
+  <ul class="nav-links">
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#diagnosis">Diagnosis</a></li>
+    <li><a href="#method">Method</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#authors">Authors</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#citation">Cite</a></li>
+  </ul>
+</nav>
+
+<main id="top">
+  <section class="hero">
+    <div class="inner hero-inner">
+      <p class="venue-badge"><i class="fas fa-award" aria-hidden="true"></i> IJCAI-ECAI 2026</p>
+      <h1>MLLMs Get It Right, Then Get It Wrong:<br />Tracing and Correcting Late-Layer Textual Bias</h1>
+
+      <p class="author-list">
+        <a href="#authors">Xingming Li</a><sup>1</sup>,&nbsp;
+        <a href="#authors">Ao Cheng</a><sup>1</sup>,&nbsp;
+        <a href="#authors">Qiyao Sun</a><sup>1</sup>,&nbsp;
+        <a href="#authors">Xixiang He</a><sup>1</sup>,&nbsp;
+        <a href="#authors">Xuanyu Ji</a><sup>1</sup>,&nbsp;
+        <a href="#authors">Runke Huang</a><sup>2</sup>,&nbsp;
+        <a href="#authors">Qingyong Hu</a><sup>3,&dagger;</sup>
+      </p>
+      <p class="author-note"><sup>&dagger;</sup> Corresponding author</p>
+
+      <div class="affiliations" aria-label="Affiliations">
+        <span><sup>1</sup> National University of Defense Technology</span>
+        <span><sup>2</sup> The Chinese University of Hong Kong, Shenzhen</span>
+        <span><sup>3</sup> Intelligent Game and Decision Lab</span>
+      </div>
+
+      <div class="button-row" aria-label="Publication links">
+        <a class="pub-btn pub-btn-primary is-disabled" href="#" aria-disabled="true" title="Paper link coming soon">
+          <i class="fas fa-file-alt" aria-hidden="true"></i> Paper Coming Soon
+        </a>
+        <a class="pub-btn pub-btn-outline is-disabled" href="#" aria-disabled="true" title="arXiv link coming soon">
+          <i class="fas fa-file-pdf" aria-hidden="true"></i> arXiv Coming Soon
+        </a>
+        <a class="pub-btn pub-btn-outline" href="https://github.com/QingyongHu/CALRD" target="_blank" rel="noopener">
+          <i class="fab fa-github" aria-hidden="true"></i> Code
+        </a>
+        <a class="pub-btn pub-btn-outline is-disabled" href="#" aria-disabled="true" title="Dataset link coming soon">
+          <i class="fas fa-database" aria-hidden="true"></i> Dataset Coming Soon
+        </a>
+        <a class="pub-btn pub-btn-outline" href="#citation">
+          <i class="fas fa-quote-right" aria-hidden="true"></i> BibTeX
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="figure-band fade-target" id="teaser">
+    <div class="inner">
+      <figure class="paper-figure">
+        <img src="static/images/figures/teaser.webp" alt="Overview of late-layer textual override and CALRD motivation" loading="eager" decoding="async" fetchpriority="high" />
+        <figcaption>
+          <strong>Overview.</strong> Under visual-textual conflict, MLLMs can initially prefer the correct visual answer, then reverse toward the textual claim in late layers. The direction of this shift predicts correctness and motivates CALRD.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="page-section" id="abstract">
+    <div class="inner inner-narrow">
+      <div class="section-header">
+        <h2>Abstract</h2>
+      </div>
+      <div class="abstract-box fade-target">
+        <p>
+          When vision contradicts text, multimodal large language models (MLLMs) consistently favor text, even when images provide clear evidence otherwise. This bias poses risks for applications requiring visual grounding, yet its cause remains unclear. In this paper, we uncover a surprising finding: models often get it right initially, forming correct vision-based predictions in their intermediate layers, before changing their minds and favoring text in the final output. We call this <strong>late-layer textual override</strong>. The visual information is encoded, it simply does not survive to the output.
+        </p>
+        <p>
+          More intriguingly, we find that how predictions change reveals whether they are correct: <strong>85%</strong> of failures shift toward text, while <strong>89%</strong> of successes shift toward vision. This directional signature enables a simple but powerful intervention: when we detect a confident visual prediction being suppressed, we restore it. We propose <strong>CALRD</strong> (Conflict-Aware Layer Reference Decoding), a training-free method that recovers overridden predictions at inference time. Experiments across five MLLMs of varying architectures demonstrate <strong>4-9%</strong> absolute improvements on conflict benchmarks while maintaining standard performance, without training or external knowledge.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-band" aria-label="Key statistics">
+    <div class="inner">
+      <div class="stats-grid">
+        <div class="stat-item fade-target">
+          <div class="stat-number" data-counter="85">0<span>%</span></div>
+          <p>Failure cases shift toward text</p>
+        </div>
+        <div class="stat-item fade-target">
+          <div class="stat-number" data-counter="89">0<span>%</span></div>
+          <p>Successful cases shift toward vision</p>
+        </div>
+        <div class="stat-item fade-target">
+          <div class="stat-number">4-9<span>%</span></div>
+          <p>Absolute gains on conflict tasks</p>
+        </div>
+        <div class="stat-item fade-target">
+          <div class="stat-number" data-counter="5">0</div>
+          <p>MLLM families evaluated</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section alt-bg" id="highlights">
+    <div class="inner">
+      <div class="section-header">
+        <h2>Highlights</h2>
+        <p>Core contributions extracted from the paper introduction and method sections.</p>
+      </div>
+      <div class="card-grid three">
+        <article class="info-card fade-target">
+          <span class="card-index">1</span>
+          <h3>Layer-Wise Conflict Diagnosis</h3>
+          <p>Introduces Modal Dominance Ratio (MDR) to trace visual-versus-textual preference across model depth and identify late-layer textual override as a characteristic failure pattern.</p>
+        </article>
+        <article class="info-card fade-target">
+          <span class="card-index">2</span>
+          <h3>Selective Training-Free Decoding</h3>
+          <p>CALRD detects harmful override through anchor confidence and prediction retention, then adaptively restores transition-layer logits without external knowledge or finetuning.</p>
+        </article>
+        <article class="info-card fade-target">
+          <span class="card-index">3</span>
+          <h3>Conflict-VQA and Broad Evaluation</h3>
+          <p>Evaluates five MLLMs on Conflict-VQA and PhD-icc, with standard hallucination checks on POPE and CHAIR to verify that improvements do not degrade non-conflict behavior.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section" id="diagnosis">
+    <div class="inner">
+      <div class="section-header">
+        <h2>Diagnosis</h2>
+        <p>MLLM failures under conflict arise after visual evidence has already appeared in intermediate representations.</p>
+      </div>
+
+      <div class="two-column">
+        <figure class="paper-figure fade-target">
+          <img src="static/images/figures/mdr_combined.webp" alt="Layer-wise Modal Dominance Ratio trajectories" loading="lazy" decoding="async" />
+          <figcaption>
+            <strong>Layer-wise MDR.</strong> Conflict-Incorrect samples reverse from positive MDR to negative MDR in late layers, while correct samples keep visual preference.
+          </figcaption>
+        </figure>
+        <figure class="paper-figure fade-target">
+          <img src="static/images/figures/compare.webp" alt="JSD and MDR trajectories showing different transition directions" loading="lazy" decoding="async" />
+          <figcaption>
+            <strong>Direction matters.</strong> JSD spikes alone do not identify failures; the MDR direction distinguishes harmful text-ward shifts from helpful vision-ward refinement.
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="insight-strip fade-target">
+        <div>
+          <h3>Late-layer textual override</h3>
+          <p>Failure cases often contain the correct visual answer in intermediate layers, then lose it as late layers move probability mass toward the text-suggested answer.</p>
+        </div>
+        <div>
+          <h3>Inference-time signature</h3>
+          <p>High transition-layer confidence plus low final-layer retention signals that a confident prediction was suppressed before output.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section alt-bg" id="method">
+    <div class="inner">
+      <div class="section-header">
+        <h2>Conflict-Aware Layer Reference Decoding</h2>
+        <p>CALRD recovers what the model already knew but failed to preserve.</p>
+      </div>
+
+      <figure class="paper-figure method-figure fade-target">
+        <img src="static/images/figures/framework.webp" alt="CALRD framework overview" loading="lazy" decoding="async" />
+        <figcaption>
+          <strong>CALRD overview.</strong> The method detects override patterns, computes adaptive correction strength, and blends transition-layer logits back into the final distribution.
+        </figcaption>
+      </figure>
+
+      <div class="method-steps">
+        <article class="step-card fade-target">
+          <div class="step-icon"><i class="fas fa-wave-square" aria-hidden="true"></i></div>
+          <h3>Find the Transition Layer</h3>
+          <p>After the stability onset, CALRD locates the adjacent-layer distributional shift with maximum Jensen-Shannon divergence.</p>
+        </article>
+        <article class="step-card fade-target">
+          <div class="step-icon"><i class="fas fa-crosshairs" aria-hidden="true"></i></div>
+          <h3>Detect Suppressed Anchors</h3>
+          <p>Anchor confidence measures the transition-layer top prediction; prediction retention measures whether that prediction survives to the final layer.</p>
+        </article>
+        <article class="step-card fade-target">
+          <div class="step-icon"><i class="fas fa-code-branch" aria-hidden="true"></i></div>
+          <h3>Blend Only When Needed</h3>
+          <p>The intervention strength is lambda = Dconf x (1 - rho), so confident predictions are restored only when they are being suppressed.</p>
+        </article>
+      </div>
+
+      <div class="formula-card fade-target">
+        <p><strong>Adjusted logits:</strong> phi' = (1 - lambda) phi(final) + lambda phi(transition)</p>
+        <p>When retention is high, lambda stays near zero and CALRD leaves the model output largely unchanged.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section" id="data">
+    <div class="inner">
+      <div class="section-header">
+        <h2>Conflict-VQA</h2>
+        <p>A diagnostic benchmark with explicit visual and textual answer annotations for mechanistic analysis.</p>
+      </div>
+      <div class="two-column data-layout">
+        <figure class="paper-figure fade-target">
+          <img src="static/images/figures/data.webp" alt="Conflict-VQA construction pipeline" loading="lazy" decoding="async" />
+          <figcaption>
+            <strong>Dataset construction.</strong> Images from VrR-VG and questions from TDIUC are paired with GPT-4o generated factual and conflicting contexts, followed by manual verification.
+          </figcaption>
+        </figure>
+        <div class="data-summary fade-target">
+          <h3>Benchmark Scope</h3>
+          <ul>
+            <li><strong>5,969</strong> total paired samples.</li>
+            <li>Six question types: object presence, color, attribute, counting, spatial reasoning, and activity recognition.</li>
+            <li>Competent subsets filter out basic visual perception errors before measuring conflict resolution.</li>
+          </ul>
+          <table class="compact-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Competent subset</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>InstructBLIP</td><td>2,017</td></tr>
+              <tr><td>LLaVA-1.5</td><td>1,212</td></tr>
+              <tr><td>LLaVA-1.6</td><td>2,506</td></tr>
+              <tr><td>Qwen2.5-VL</td><td>3,940</td></tr>
+              <tr><td>Qwen3-VL</td><td>5,252</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section alt-bg" id="results">
+    <div class="inner inner-wide">
+      <div class="section-header">
+        <h2>Results</h2>
+        <p>CALRD improves conflict resolution across model families and decoding strategies while maintaining standard performance.</p>
+      </div>
+
+      <div class="result-cards">
+        <article class="metric-card fade-target">
+          <span>Conflict-VQA</span>
+          <strong>+4-9%</strong>
+          <p>Absolute accuracy gains across five MLLMs.</p>
+        </article>
+        <article class="metric-card fade-target">
+          <span>PhD-icc</span>
+          <strong>+8.6%</strong>
+          <p>LLaVA-1.5 greedy accuracy rises from 27.72 to 36.35.</p>
+        </article>
+        <article class="metric-card fade-target">
+          <span>CHAIR</span>
+          <strong>-38%</strong>
+          <p>InstructBLIP greedy CI drops from 23.7 to 14.6.</p>
+        </article>
+      </div>
+
+      <div class="table-block fade-target">
+        <h3>Greedy Decoding on Conflict Benchmarks</h3>
+        <div class="table-scroll">
+          <table class="results-table">
+            <thead>
+              <tr>
+                <th rowspan="2">Model</th>
+                <th colspan="2">Conflict-VQA Acc.</th>
+                <th colspan="2">PhD-icc Acc.</th>
+              </tr>
+              <tr>
+                <th>Vanilla</th>
+                <th>CALRD</th>
+                <th>Vanilla</th>
+                <th>CALRD</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>InstructBLIP</td><td>39.61</td><td class="best">44.12 (+4.5)</td><td>41.08</td><td class="best">49.62 (+8.5)</td></tr>
+              <tr><td>LLaVA-1.5</td><td>36.20</td><td class="best">41.90 (+5.7)</td><td>27.72</td><td class="best">36.35 (+8.6)</td></tr>
+              <tr><td>LLaVA-1.6</td><td>42.35</td><td class="best">49.51 (+7.2)</td><td>28.23</td><td class="best">36.52 (+8.3)</td></tr>
+              <tr><td>Qwen2.5-VL</td><td>65.61</td><td class="best">70.15 (+4.5)</td><td>51.30</td><td class="best">56.20 (+4.9)</td></tr>
+              <tr><td>Qwen3-VL</td><td>75.58</td><td class="best">77.42 (+1.8)</td><td>60.32</td><td class="best">63.68 (+3.4)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">Numbers are extracted from the paper's Table 1. Parentheses show absolute improvement over vanilla greedy decoding.</p>
+      </div>
+
+      <div class="two-column result-figures">
+        <figure class="paper-figure fade-target">
+          <img src="static/images/figures/detection.webp" alt="Distribution of anchor confidence and prediction retention signals" loading="lazy" decoding="async" />
+          <figcaption>
+            <strong>Detection signals.</strong> Conflict-Incorrect samples cluster around high anchor confidence and low prediction retention.
+          </figcaption>
+        </figure>
+        <div class="ablation-card fade-target">
+          <h3>Ablation on LLaVA-1.6</h3>
+          <table class="compact-table">
+            <thead><tr><th>Configuration</th><th>C-VQA</th><th>POPE</th></tr></thead>
+            <tbody>
+              <tr><td>Vanilla</td><td>42.3</td><td>85.4</td></tr>
+              <tr><td>CALRD Full</td><td class="best">49.5</td><td class="best">88.2</td></tr>
+              <tr><td>w/o Dconf</td><td>47.3</td><td>87.5</td></tr>
+              <tr><td>w/o rho</td><td>45.1</td><td>86.6</td></tr>
+              <tr><td>Fixed layer</td><td>45.9</td><td>87.1</td></tr>
+            </tbody>
+          </table>
+          <p>Both detection signals and dynamic transition-layer selection contribute to the improvement.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section" id="gallery">
+    <div class="inner">
+      <div class="section-header">
+        <h2>Paper Figures</h2>
+        <p>Representative visualizations used in the project page.</p>
+      </div>
+      <div class="gallery-grid">
+        <a class="gallery-card fade-target" href="static/images/figures/teaser.webp" target="_blank" rel="noopener">
+          <img src="static/images/figures/teaser.webp" alt="Teaser figure thumbnail" loading="lazy" decoding="async" />
+          <span>Teaser</span>
+        </a>
+        <a class="gallery-card fade-target" href="static/images/figures/framework.webp" target="_blank" rel="noopener">
+          <img src="static/images/figures/framework.webp" alt="Framework figure thumbnail" loading="lazy" decoding="async" />
+          <span>Framework</span>
+        </a>
+        <a class="gallery-card fade-target" href="static/images/figures/mdr_combined.webp" target="_blank" rel="noopener">
+          <img src="static/images/figures/mdr_combined.webp" alt="MDR analysis thumbnail" loading="lazy" decoding="async" />
+          <span>MDR Analysis</span>
+        </a>
+        <a class="gallery-card fade-target" href="static/images/figures/compare.webp" target="_blank" rel="noopener">
+          <img src="static/images/figures/compare.webp" alt="JSD and MDR comparison thumbnail" loading="lazy" decoding="async" />
+          <span>Shift Direction</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section alt-bg" id="authors">
+    <div class="inner inner-wide">
+      <div class="section-header">
+        <h2>Authors</h2>
+      </div>
+      <div class="authors-grid">
+        <article class="author-card fade-target">
+          <img src="static/images/bio/xingming-li.jpg" alt="Xingming Li" loading="lazy" decoding="async" />
+          <h3>Xingming Li</h3>
+          <p>National University of Defense Technology</p>
+        </article>
+        <article class="author-card fade-target">
+          <img src="static/images/bio/ao-cheng.jpg" alt="Ao Cheng" loading="lazy" decoding="async" />
+          <h3>Ao Cheng</h3>
+          <p>National University of Defense Technology</p>
+        </article>
+        <article class="author-card fade-target">
+          <img src="static/images/bio/qiyao-sun.png" alt="Qiyao Sun" loading="lazy" decoding="async" />
+          <h3>Qiyao Sun</h3>
+          <p>National University of Defense Technology</p>
+        </article>
+        <article class="author-card fade-target">
+          <img src="static/images/bio/xixiang-he.jpg" alt="Xixiang He" loading="lazy" decoding="async" />
+          <h3>Xixiang He</h3>
+          <p>National University of Defense Technology</p>
+        </article>
+        <article class="author-card fade-target">
+          <img src="static/images/bio/xuanyu-ji.jpg" alt="Xuanyu Ji" loading="lazy" decoding="async" />
+          <h3>Xuanyu Ji</h3>
+          <p>National University of Defense Technology</p>
+        </article>
+        <article class="author-card fade-target">
+          <img src="static/images/bio/runke-huang.png" alt="Runke Huang" loading="lazy" decoding="async" />
+          <h3>Runke Huang</h3>
+          <p>The Chinese University of Hong Kong, Shenzhen</p>
+        </article>
+        <article class="author-card corresponding fade-target">
+          <img src="static/images/bio/qingyong-hu.jpg" alt="Qingyong Hu" loading="lazy" decoding="async" />
+          <h3>Qingyong Hu <sup>&dagger;</sup></h3>
+          <p>Intelligent Game and Decision Lab</p>
+          <span>Corresponding</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section" id="contact">
+    <div class="inner inner-narrow">
+      <div class="section-header">
+        <h2>Contact</h2>
+        <p>For questions about CALRD or multimodal knowledge conflict analysis, please contact the corresponding author.</p>
+      </div>
+      <div class="contact-card fade-target">
+        <img src="static/images/bio/qingyong-hu.jpg" alt="Qingyong Hu" loading="lazy" decoding="async" />
+        <div>
+          <h3>Qingyong Hu</h3>
+          <p>Corresponding Author &middot; Intelligent Game and Decision Lab</p>
+          <a href="mailto:huqingyong15@outlook.com">
+            <i class="fas fa-envelope" aria-hidden="true"></i>
+            huqingyong15@outlook.com
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section alt-bg" id="citation">
+    <div class="inner inner-narrow">
+      <div class="section-header">
+        <h2>Citation</h2>
+        <p>Please cite the paper if CALRD is useful for your research.</p>
+      </div>
+      <div class="bibtex-wrapper fade-target">
+        <div class="bibtex-header">
+          <span>BibTeX</span>
+          <button id="copyBibtex" type="button" aria-label="Copy BibTeX citation">
+            <i class="fas fa-copy" aria-hidden="true"></i>
+            <span>Copy</span>
+          </button>
+        </div>
+        <pre id="bibtexContent"><code>@inproceedings{li2026calrd,
+  title     = {MLLMs Get It Right, Then Get It Wrong: Tracing and
+               Correcting Late-Layer Textual Bias},
+  author    = {Li, Xingming and Cheng, Ao and Sun, Qiyao and He, Xixiang
+               and Ji, Xuanyu and Huang, Runke and Hu, Qingyong},
+  booktitle = {Proceedings of the Thirty-Fifth International Joint
+               Conference on Artificial Intelligence},
+  year      = {2026},
+  note      = {IJCAI-ECAI 2026}
+}</code></pre>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="inner">
+    <p>
+      &copy; 2026 CALRD Authors. Website design follows the group's academic project page style and is inspired by
+      <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener">Academic Project Page Template</a>.
+    </p>
+  </div>
+</footer>
+
+<button id="scrollTop" class="scroll-top" type="button" aria-label="Scroll to top">
+  <i class="fas fa-chevron-up" aria-hidden="true"></i>
+</button>
+
+<script src="static/js/index.js"></script>
+</body>
+</html>

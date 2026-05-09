@@ -1,0 +1,62 @@
+
+
+\begin{figure}[t]
+\centering
+  \includegraphics[width=\linewidth]{figures/framework.pdf}
+  \caption{Overview of CALRD. Under visual-textual conflict (left), predictions shift from the visual answer toward the textual one across layers (middle). CALRD detects this override pattern and recovers the suppressed vision-grounded prediction from the transition layer (right).}
+\end{figure}
+
+
+\section{Conflict-Aware Layer Reference Decoding}
+\label{sec:method}
+
+
+The analysis in Section~\ref{sec:analysis} shows that harmful overrides are characterized by a late-layer shift from visual to textual preference, and that the direction of this shift distinguishes failures from successes. However, the MDR analysis relies on ground-truth $(w_{\text{vis}}, w_{\text{text}})$ labels, unavailable at inference. Can we detect harmful overrides without labels? In this section, we develop practical detection signals and a decoding strategy that recovers overridden predictions without requiring such labels.
+
+Specifically, we propose \emph{Conflict-Aware Layer Reference Decoding} (CALRD), a training-free method. CALRD first identifies when a confident transition-layer prediction is being suppressed, then adjusts the output distribution to restore it. Since prediction transitions also occur in correct outputs, the intervention must be selective: we modulate its strength based on how strongly the override signature is present.
+
+
+\subsection{Detecting Harmful Override}
+
+
+The MDR analysis shows that Conflict-Incorrect samples hold confident predictions at $L_{\text{trans}}$ that do not survive to the final layer (section~\ref{sec:analysis}). This observation motivates two simple signals. Let $w^* = \arg\max_w P^{(L_{\text{trans}})}_t(w)$ be the top prediction at transition. Our detection signals are:
+
+\textbf{Anchor confidence:} How certain was the intermediate prediction?
+\begin{equation}
+D_{\text{conf}} = P^{(L_{\text{trans}})}_t(w^*)
+\end{equation}
+
+High values indicate the model had a clear preference before late-layer processing.
+
+\textbf{Prediction retention:} Did it survive to the output?
+\begin{equation}
+\rho = \min\left(1, \frac{P^{(N)}_t(w^*)}{P^{(L_{\text{trans}})}_t(w^*)}\right)
+\end{equation}
+
+When $\rho$ stays near 1, the prediction held. When it drops toward 0, the model shifted to a different answer.
+
+Figure~\ref{fig:detection_signals} shows how these signals distribute across sample types. Conflict-Incorrect samples cluster in the high-$D_{\text{conf}}$, low-$\rho$ region: confident predictions that get overridden. Non-Conflict and Conflict-Correct samples maintain high $\rho$, meaning their predictions persist. This separation allows us to detect harmful overrides at test time.
+
+
+\subsection{Adaptive Intervention}
+
+Not all prediction transitions are harmful. As shown in Section~\ref{sec:discovery2}, transitions toward vision correlate with correct outputs, while transitions toward text correlate with failures. To avoid disrupting beneficial late-layer processing, intervention strength must adapt to override severity. We define:
+
+\begin{equation}
+\lambda = D_{\text{conf}} \cdot (1 - \rho)
+\label{eq:lambda}
+\end{equation}
+
+
+The multiplicative form ensures that $\lambda$ is substantial only when \emph{both} conditions hold: a confident transition-layer prediction exists ($D_{\text{conf}}$ high) \emph{and} it is being suppressed ($\rho$ low). When $D_{\text{conf}}$ is low, there is no strong preference to recover, so $\lambda$ stays small regardless of retention. When $\rho$ is high, the prediction already survives to the output, so intervention is unnecessary. Only when a confident prediction gets discarded does $\lambda$ become large enough to affect decoding. This design is motivated by the asymmetry observed in Section~\ref{sec:discovery2}: harmful cases are more likely to exhibit confident intermediate predictions that are later suppressed, whereas correct cases tend to preserve them.
+
+\subsection{Transition-Layer Guided Decoding}
+
+Given $\lambda$, we adjust the output logits by combining final-layer and transition-layer predictions. Let $\phi^{(l)}_t = W_{\text{head}} \cdot h^{(l)}_t$ denote the unnormalized logits at layer $l$. The adjusted logits are:
+\begin{equation}
+\phi'_t = (1 - \lambda) \cdot \phi^{(N)}_t + \lambda \cdot \phi^{(L_{\text{trans}})}_t
+\end{equation}
+with output distribution $P'_t = \text{softmax}(\phi'_t)$. When $\lambda = 0$, this reduces to standard decoding. As $\lambda$ increases, the transition-layer prediction receives more weight, recovering the vision-grounded answer that would otherwise be lost. For samples without override signatures, $\lambda$ remains near zero and the output is largely unchanged.
+
+
+CALRD works at each token position independently. For multi-token generation, we recompute $L_{\text{trans}}$, $D_{\text{conf}}$, and $\rho$ at each step, allowing the intervention strength to vary across the sequence. The logit-level operation makes CALRD compatible with greedy, beam search, and nucleus sampling without modification. Note that CALRD does not introduce external knowledge or require additional training. The correction comes entirely from the model's own intermediate representations. As our analysis shows, the vision-grounded answer is often already present at the transition layer; CALRD simply helps it survive to the output.

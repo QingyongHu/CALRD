@@ -1,0 +1,731 @@
+%%%% ijcai26.tex
+
+\typeout{IJCAI--ECAI 26 Instructions for Authors}
+
+% These are the instructions for authors for IJCAI--ECAI 26.
+
+\documentclass{article}
+\pdfpagewidth=8.5in
+\pdfpageheight=11in
+
+% The file ijcai26.sty is a copy from ijcai22.sty
+% The file ijcai22.sty is NOT the same as previous years'
+\usepackage{ijcai26}
+
+% Use the postscript times font!
+\usepackage{times}
+\usepackage{soul}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[small]{caption}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{booktabs}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage[switch]{lineno}
+
+
+
+%%%%%%%%%%%%%
+
+
+% \usepackage{microtype}
+% \usepackage{algorithm}
+ % \usepackage[ruled,linesnumbered]{algorithm2e}
+% \usepackage{algpseudocode}
+% \usepackage{natbib}
+\usepackage{varwidth}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{rotating}
+\usepackage{amssymb}
+\usepackage{subcaption}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{ragged2e}
+% \raggedbottom
+\usepackage{amsfonts}
+\usepackage{newtxmath}
+\usepackage{dsfont}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+% \usepackage{algpseudocode}
+
+\usepackage{tcolorbox}
+\usepackage{listings}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+%%%%%%%%
+
+% Comment out this line in the camera-ready submission
+\linenumbers
+
+\urlstyle{same}
+
+% the following package is optional:
+%\usepackage{latexsym}
+
+% See https://www.overleaf.com/learn/latex/theorems_and_proofs
+% for a nice explanation of how to define new theorems, but keep
+% in mind that the amsthm package is already included in this
+% template and that you must *not* alter the styling.
+\newtheorem{example}{Example}
+\newtheorem{theorem}{Theorem}
+
+% Following comment is from ijcai97-submit.tex:
+% The preparation of these files was supported by Schlumberger Palo Alto
+% Research, AT\&T Bell Laboratories, and Morgan Kaufmann Publishers.
+% Shirley Jowell, of Morgan Kaufmann Publishers, and Peter F.
+% Patel-Schneider, of AT\&T Bell Laboratories collaborated on their
+% preparation.
+
+% These instructions can be modified and used in other conferences as long
+% as credit to the authors and supporting agencies is retained, this notice
+% is not changed, and further modification or reuse is not restricted.
+% Neither Shirley Jowell nor Peter F. Patel-Schneider can be listed as
+% contacts for providing assistance without their prior permission.
+
+% To use for other conferences, change references to files and the
+% conference appropriate and use other authors, contacts, publishers, and
+% organizations.
+% Also change the deadline and address for returning papers and the length and
+% page charge instructions.
+% Put where the files are available in the appropriate places.
+
+
+% PDF Info Is REQUIRED.
+
+% Please leave this \pdfinfo block untouched both for the submission and
+% Camera Ready Copy. Do not include Title and Author information in the pdfinfo section
+\pdfinfo{
+/TemplateVersion (IJCAI.2026.0)
+}
+
+\title{MLLMs Get It Right, Then Get It Wrong: Tracing and Correcting \\ Late-Layer Textual Bias}
+
+% Single author syntax
+\author{
+    Author Name
+    \affiliations
+    Affiliation
+    \emails
+    email@example.com
+}
+
+% Multiple author syntax (remove the single-author syntax above and the \iffalse ... \fi here)
+\iffalse
+\author{
+First Author$^1$
+\and
+Second Author$^2$\and
+Third Author$^{2,3}$\And
+Fourth Author$^4$\\
+\affiliations
+$^1$First Affiliation\\
+$^2$Second Affiliation\\
+$^3$Third Affiliation\\
+$^4$Fourth Affiliation\\
+\emails
+\{first, second\}@example.com,
+third@other.example.com,
+fourth@example.com
+}
+\fi
+
+% Define a switch to show/hide revisions
+\newif\ifshowrevisions
+\showrevisionstrue  % Change to \showrevisionsfalse to hide blue color
+
+
+% Define the revision environment
+\newenvironment{revised}{%
+  \ifshowrevisions%
+    % \color{blue}%
+  \fi%
+}{}
+
+\begin{document}
+
+\maketitle
+
+% \begin{abstract}
+%     \input{chapters/0-abstract}
+% \end{abstract}
+
+% % \section{Introduction}
+
+% \input{chapters/1-instruction}
+
+
+
+% \input{chapters/3-empirical_study}
+
+% \input{chapters/4-method}
+
+% \input{chapters/5-exp}
+
+% \input{chapters/2-related_work}
+
+% \input{chapters/6-conclusion}
+
+
+
+
+% \section*{Ethical Statement}
+
+% There are no ethical issues.
+
+% \section*{Acknowledgments}
+
+% The preparation of these instructions and the \LaTeX{} and Bib\TeX{}
+% files that implement them was supported by Schlumberger Palo Alto
+% Research, AT\&T Bell Laboratories, and Morgan Kaufmann Publishers.
+% Preparation of the Microsoft Word file was supported by IJCAI.  An
+% early version of this document was created by Shirley Jowell and Peter
+% F. Patel-Schneider.  It was subsequently modified by Jennifer
+% Ballentine, Thomas Dean, Bernhard Nebel, Daniel Pagenstecher,
+% Kurt Steinkraus, Toby Walsh, Carles Sierra, Marc Pujol-Gonzalez,
+% Francisco Cruz-Mencia and Edith Elkind.
+
+
+%% The file named.bst is a bibliography style file for BibTeX 0.99c
+% \bibliographystyle{named}
+% \bibliography{ijcai26}
+
+
+% \newpage
+
+\appendix
+
+
+
+\begin{revised}
+    
+
+\section*{Appendix Overview}
+
+
+Due to space constraints in the main text, we provide supplementary materials in this appendix. Appendix A details the construction of Conflict-VQA, the diagnostic benchmark introduced in Section 3.1 for evaluating visual-textual conflict resolution. Appendix B provides the complete pseudocode for CALRD, complementing the method description in Section 4. Appendix C offers additional analysis of the late-layer textual override phenomenon, including a representative case study and discussion of potential causes. The remaining sections present additional experimental results (Appendix D), formal definitions of evaluation metrics (Appendix E), implementation details for reproducibility (Appendix F), and qualitative examples illustrating CALRD's behavior (Appendix G).
+
+
+\section{Conflict-VQA: Benchmark Construction}
+\label{sec:appendix_construction}
+
+This section details the construction of Conflict-VQA, the diagnostic benchmark introduced in Section 3.1. Conflict-VQA is designed to evaluate how MLLMs resolve conflicts between visual evidence and textual context, with explicit annotations of both vision-grounded ($w_{\mathrm{vis}}$) and text-suggested ($w_{\mathrm{text}}$) answers.
+\subsection{Data Sources and Preprocessing}
+
+
+We construct Conflict-VQA by combining images from VrR-VG~\cite{VrR-VG2019} with questions from TDIUC~\cite{TD-IUC2017}, matching samples by \texttt{image\_id}. We focus on six question types where visual-textual conflicts can be unambiguously defined: object presence, color, attribute, counting, positional reasoning, and activity recognition.
+
+VrR-VG provides scene graphs that we use to ground context generation. However, these annotations require preprocessing before use. Object identifiers are often inconsistent—the same object may appear under different names or be split into multiple entries. We normalize these by mapping synonyms to canonical names and merging duplicates while preserving count and attribute information. Relations are converted to readable \{\emph{subject}, \emph{predicate}, \emph{object}\} triples. This preprocessing yields a structured scene representation that grounds the subsequent context generation step.
+
+\subsection{Answer Pair and Context Generation}
+
+Each sample requires two answers: $w_{\mathrm{vis}}$ (the vision-grounded answer) and $w_{\mathrm{text}}$ (the text-suggested conflicting answer). The original TDIUC answer serves as $w_{\mathrm{vis}}$. We construct $w_{\mathrm{text}}$ based on question type: flipping yes/no for presence questions, substituting with a plausible alternative for color and attribute questions, perturbing counts by $\pm$1 or $\pm$2 for counting questions, flipping spatial relations for positional questions, and substituting with similar actions for activity questions. We discard cases where the constructed $w_{\mathrm{text}}$ would be implausible given the scene.
+
+For each sample, we prompt GPT-4o to generate two contexts (see Figure~\ref{fig:prompt} for the complete prompt template). The factual context $C_{\mathrm{factual}}$ accurately describes the scene and supports $w_{\mathrm{vis}}$, while the conflict context $C_{\mathrm{conflict}}$ is nearly identical but contains exactly one statement supporting $w_{\mathrm{text}}$ instead. Both contexts are 3--5 sentences of natural prose, reference 2--3 real objects from the scene, use confident declarative language without hedging, and introduce no fabricated objects.
+
+\subsection{Quality Control and Evaluation Protocol}
+
+Two researchers independently verified all samples, checking that $C_{\mathrm{factual}}$ accurately describes the image, that $C_{\mathrm{conflict}}$ differs only in the intended contradictory statement, and that both contexts are fluent and natural. Disagreements were resolved through discussion, resulting in approximately 8\% of initial candidates being filtered out.
+
+Table~\ref{tab:accuracy_relationship} reports three metrics for each model. Non-conflict accuracy measures baseline performance under $C_{\mathrm{factual}}$. Conflict accuracy measures performance under $C_{\mathrm{conflict}}$; the gap between the two reflects how much the misleading context hurts. The competent ratio is stricter: it requires a model to answer correctly in all five trials under $C_{\mathrm{factual}}$. We use the competent subset for mechanistic analysis in Section 3, ensuring that studied failures reflect conflict resolution rather than poor visual perception. The main evaluation in Section 4 uses the full dataset.
+
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/data_example.pdf}
+  \caption{Examples from Conflict-VQA. $C_{\mathrm{conflict}}$ contains a false 
+claim (red) that contradicts the image, while $C_{\mathrm{factual}}$ states the 
+correct answer (green). Other parts of the two contexts remain identical.}
+  \label{fig:data_example}
+\end{figure*}
+
+\begin{table}[t]
+\centering
+
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccc}
+\toprule
+Model & Non-Conflict & Conflict & \multicolumn{2}{c}{Competent Subset} \\
+\cmidrule(lr){4-5}
+      & Acc. & Acc. & Ratio & $n$ \\
+\midrule
+InstructBLIP & 50.7 & 39.6 & 33.8 & 2,017 \\
+LLaVA-1.5    & 38.7 & 36.2 & 20.3 & 1,212 \\
+LLaVA-1.6    & 54.9 & 42.4 & 42.0 & 2,506 \\
+Qwen2.5-VL   & 81.2 & 65.6 & 66.0 & 3,940 \\
+Qwen3-VL     & 91.3 & 75.6 & 88.0 & 5,252 \\
+\bottomrule
+\end{tabular}
+\caption{Accuracy under non-conflict and conflict conditions. Competent subset: correct in all five trials under $C_{\mathrm{factual}}$ ($N$=5,969).}
+\label{tab:accuracy_relationship}
+\end{table}
+
+
+\section{CALRD Algorithm}
+\label{sec:appendix_algorithm}
+
+This section provides the complete pseudocode for Conflict-Aware Layer Reference Decoding (CALRD), the training-free decoding method proposed in Section 3.4. Algorithm~\ref{alg:calrd} details the three-stage procedure executed at each step.
+
+\textbf{Stage 1: Transition Layer Localization.} CALRD first identifies the stability onset $L_{\text{start}}$ by finding the layer with maximum entropy drop, then locates the transition layer $L_{\text{trans}}$ by computing Jensen-Shannon Divergence (JSD) between adjacent layer distributions. JSD is defined as:
+\begin{equation}
+\text{JSD}(P \| Q) = \frac{1}{2}D_{\text{KL}}(P \| M) + \frac{1}{2}D_{\text{KL}}(Q \| M), \quad M = \frac{1}{2}(P + Q)
+\end{equation}
+where $D_{\text{KL}}$ denotes Kullback-Leibler divergence.
+
+\textbf{Stage 2: Override Detection.} Using the transition layer distribution, CALRD computes two signals: anchor confidence (how certain the transition-layer prediction is) and prediction retention (whether it survives to the final layer). The correction strength $\lambda$ is high when confidence is high but retention is low—the signature of harmful override.
+
+\textbf{Stage 3: Adaptive Correction.} CALRD interpolates between final-layer and transition-layer logits, weighted by $\lambda$. When no override is detected, $\lambda \approx 0$ and output remains unchanged.
+
+
+
+\section{Understanding Late-Layer Override}
+\label{appendix:override}
+
+This section provides additional analysis of the late-layer textual override phenomenon introduced in Section 3.1. We first present a detailed case study, then discuss potential causes of this behavior.
+
+\subsection{A Representative Case}
+
+Figure~\ref{fig:case_study} illustrates a failure case from LLaVA-1.6. The input image shows a yellow banana next to brown donuts on a white plate. The accompanying context falsely states that the banana appears brown. When asked about the banana's color, the model outputs ``brown,'' ignoring the visual evidence.
+
+\textbf{MDR trajectory} (Figure~\ref{fig:case_study}(a)): The Modal Dominance Ratio (MDR), introduced in the main paper, remains positive through early and middle layers, peaking around layer 15. This indicates preference for the visual answer during most of the forward pass. After layer 21 (marked as $L_{\text{trans}}$), MDR drops below zero and stays negative, indicating the model's preference has flipped from vision to text.
+
+\textbf{Token ranking} (Figure~\ref{fig:case_study}(b)): The correct answer ``yellow'' consistently outranks ``brown'' in shallow layers. By layers 19--21, ``yellow'' reaches rank 1—the model has encoded the correct answer. However, after $L_{\text{trans}}$, ``brown'' takes the top position while ``yellow'' falls to around rank 10.
+
+This case exemplifies our central finding: the failure is not one of perception but of preservation. The model correctly encoded the visual information in intermediate layers but did not maintain it through the output.
+
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/case_study.pdf}
+  \caption{Case study of late-layer textual override. The model is given an image of a yellow banana with context falsely describing it as brown, and outputs the incorrect answer. (a) MDR trajectory shows visual dominance in early layers before declining after $L_{\text{trans}}$. (b) Token ranking confirms ``yellow'' reaches rank 1 but is overridden by ``brown'' in later layers.}
+  \label{fig:case_study}
+\end{figure*}
+
+\subsection{Why Does Late-Layer Override Occur?}
+
+We hypothesize that late-layer override stems from training asymmetries in MLLMs. The language model backbone is pretrained on vastly more text than image-text pairs, and visual instruction tuning typically freezes the vision encoder while updating only the connector and LLM~\cite{llava-1.5,bai2025qwen2,bai2025qwen3vltechnicalreport}. Consequently, deeper layers—shaped primarily by text-only pretraining—retain strong linguistic priors.
+
+Supporting evidence comes from recent hallucination research:
+\begin{itemize}[leftmargin=*,nosep]
+    \item Wang et al.~\cite{wang2024deco} find that MLLMs recognize objects correctly in earlier layers, but this recognition is suppressed by language priors in deeper layers.
+    \item VisiPruner~\cite{fan2025visipruner} observes that cross-modal fusion peaks in middle layers, while deep layers shift toward linguistic processing.
+\end{itemize}
+
+Our results align with this view. Override occurs after the stability onset, where linguistic reasoning dominates~\cite{jiang2025devils}. Models with weaker visual grounding show larger CALRD gains (Table 2), consistent with stronger text priors leaving more room for override. The directional asymmetry we identify—text-ward shifts correlating with failures, vision-ward shifts with successes—is what enables CALRD to intervene selectively.
+
+
+\algrenewcommand{\algorithmiccomment}[1]{\hfill \textcolor{gray}{$\triangleright$ #1}}
+\begin{algorithm}[t]
+\caption{Conflict-Aware Layer Reference Decoding (CALRD)}
+\label{alg:calrd}
+\begin{algorithmic}[1]
+\Require MLLM with $N$ layers, input $(I, C, Q)$, LM head $W_{\text{head}}$
+\Ensure Generated response $y_{1:T}$
+
+\Statex
+\For{each decoding step $t$}
+    \State $\{h_t^{(l)}\}_{l=1}^{N} \gets \textsc{Forward}(I, C, Q, y_{<t})$
+    
+    \Statex \hspace{-1em} \textit{$\triangleright$ Stage 1: Locate Transition Layer}
+    \For{$l = 1$ to $N$}
+        \State $P_t^{(l)} \gets \text{softmax}(W_{\text{head}} \cdot h_t^{(l)})$ \Comment{layer-wise distribution}
+        \State $H^{(l)} \gets -\sum_{w} P_t^{(l)}(w) \log P_t^{(l)}(w)$ \Comment{entropy}
+    \EndFor
+    \State $L_{\text{start}} \gets \arg\max_{l} \left( H^{(l-1)} - H^{(l)} \right)$ \Comment{stability onset}
+    
+    \Statex
+    \For{$l = L_{\text{start}}$ to $N-1$}
+        \State $M \gets \frac{1}{2}(P_t^{(l)} + P_t^{(l+1)})$
+        \State $\text{JSD}^{(l)} \gets \frac{1}{2}D_{\text{KL}}(P_t^{(l)} \| M) + \frac{1}{2}D_{\text{KL}}(P_t^{(l+1)} \| M)$
+    \EndFor
+    \State $L_{\text{trans}} \gets \arg\max_{l \in [L_{\text{start}}, N-1]} \text{JSD}^{(l)}$ \Comment{transition layer}
+    
+    \Statex \hspace{-1em} \textit{$\triangleright$ Stage 2: Detect Override \& Compute Correction Strength}
+    \State $w^* \gets \arg\max_{w} P_t^{(L_{\text{trans}})}(w)$ \Comment{anchor prediction}
+    \State $D_{\text{conf}} \gets P_t^{(L_{\text{trans}})}(w^*)$ \Comment{anchor confidence}
+    \State $\rho \gets \min\left(1, \, P_t^{(N)}(w^*) / P_t^{(L_{\text{trans}})}(w^*)\right)$ \Comment{retention}
+    \State $\lambda \gets D_{\text{conf}} \cdot (1 - \rho)$ \Comment{correction strength}
+    
+    \Statex \hspace{-1em} \textit{$\triangleright$ Stage 3: Adaptive Logit Interpolation}
+    \State $\phi_t^{(N)} \gets W_{\text{head}} \cdot h_t^{(N)}$ \Comment{final-layer logits}
+    \State $\phi_t^{(L_{\text{trans}})} \gets W_{\text{head}} \cdot h_t^{(L_{\text{trans}})}$ \Comment{transition-layer logits}
+    \State $\phi_t^{\prime} \gets (1 - \lambda) \cdot \phi_t^{(N)} + \lambda \cdot \phi_t^{(L_{\text{trans}})}$
+    \State $y_t \sim \text{softmax}(\phi_t^{\prime})$
+\EndFor
+
+\Statex
+\State \Return $y_{1:T}$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{figure*}[t]
+\centering
+\begin{tcolorbox}[
+  colback=gray!5,
+  colframe=gray!50,
+  title=\textbf{Unified Prompt for Conflict Data Generation},
+  fonttitle=\large,
+  toptitle=3mm,
+  bottomtitle=3mm,
+  boxrule=0.5pt,
+  width=\textwidth
+]
+% \small
+
+\textbf{Task:} Generate a pair of contexts for the same image: one factual (supporting the visual answer) and one misleading (supporting a wrong answer).
+
+\vspace{0.5em}
+\textbf{Input:}
+\begin{itemize}[nosep, leftmargin=1.5em]
+    \item Question: \{question\}
+    \item Visual Answer: \{answer\}
+    \item Question Type: \{question\_type\}
+    \item Scene Type: \{scene\_type\}
+    \item Objects in Scene: \{objects\}
+    \item Relationships: \{relationships\}
+    \item Scene Description: \{description\}
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Step 1: Generate a Plausible Wrong Answer}
+
+The wrong answer (text\_answer) should be realistic and could plausibly be confused with the correct answer. Follow type-specific rules:
+
+\vspace{0.3em}
+\centering
+\begin{tabular}{@{}p{2cm}p{11cm}@{}}
+\toprule
+Type & Rule \\
+\midrule
+Attribute & Pick a plausible alternative attribute as a single word. For example, if the true color is ``red'', the wrong answer could be ``blue'' or ``brown''. \\
+Presence & If visual\_answer is ``no'': text\_answer is ``yes'', describe absent object as present. If visual\_answer is ``yes'': find a plausible absent object, rewrite the question, text\_answer becomes ``yes''. \\
+Counting & Use a wrong count close to the true count ($\pm$1 for small counts, $\pm$2 for larger). Match format: ``two'' $\rightarrow$ ``three''. \\
+Positional & Flip spatial relation: left$\leftrightarrow$right, above$\leftrightarrow$below, inside$\leftrightarrow$outside. Convert open-ended questions to yes/no. \\
+Activity & Pick a similar action: running$\leftrightarrow$walking, eating$\leftrightarrow$holding, reading$\leftrightarrow$looking at. Convert open-ended questions to yes/no. \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+\raggedright
+\textbf{Step 2: Generate Context Pair}
+
+Generate two contexts that differ in exactly one claim:
+
+\vspace{0.3em}
+\textbf{Factual context} ($C_{\text{factual}}$): A 3--5 sentence description that accurately describes the scene and supports the \textit{visual\_answer}.
+
+\vspace{0.3em}
+\textbf{Conflict context} ($C_{\text{conflict}}$): A 3--5 sentence description nearly identical to the factual context, but with exactly one statement changed to support the \textit{text\_answer} instead.
+
+\vspace{0.3em}
+Both contexts should:
+\begin{itemize}[nosep, leftmargin=1.5em]
+    \item Reference 2--3 real objects from the scene
+    \item Use confident, declarative language (no ``might be'' or ``seems'')
+    \item Not introduce fabricated objects or relations
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Output Format:}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize, backgroundcolor=\color{gray!10}, frame=single, xleftmargin=1em]
+{
+    "visual_answer": "<correct answer based on image>",
+    "text_answer": "<incorrect answer based on incorrect context>",
+    "question": "<original or modified question>",
+    "factual_context": "<3-5 sentences supporting visual_answer>",
+    "conflict_context": "<3-5 sentences supporting text_answer>",
+    "reasoning": "<why the wrong answer is plausible>"
+}
+\end{lstlisting}
+
+\end{tcolorbox}
+\caption{Prompt template for generating conflict data with GPT-4o. Each sample yields a factual context ($C_{\text{factual}}$) aligned with the image and a conflict context ($C_{\text{conflict}}$) that introduces exactly one contradicting claim.}
+\label{fig:prompt}
+\end{figure*}
+
+
+\section{Additional Experiments}
+\label{appendix:additional_exp}
+
+This section presents experimental results that complement the main evaluation in Section 4.
+
+\subsection{Comparison with SHIFT}
+
+SHIFT~\cite{wang2025shift} also leverages intermediate layers to reduce hallucinations. Since their code is not publicly available, we compare against results reported in their paper. Table~\ref{tab:shift_comparison} shows that CALRD outperforms SHIFT in most configurations on the CHAIR benchmark. We note that experimental setups differ between the two works, so this comparison should be interpreted with appropriate caution.
+
+\subsection{Inference Efficiency}
+
+Table~\ref{tab:efficiency} compares inference efficiency across decoding methods on llava-1.5. CALRD adds minimal overhead compared to vanilla decoding, while VCD (Visual Contrastive Decoding) and OPERA incur substantially higher costs due to dual-stream computation and iterative rollback, respectively.
+
+\begin{table}[h]
+\centering
+\caption{Inference efficiency comparison on LLaVA-1.5 (single H100 GPU).}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{lccccc}
+\toprule
+Metric & Vanilla & CALRD (Ours) & DeCo & VCD & OPERA \\
+\midrule
+Latency (ms/token) & 18.26 & 19.78 & 22.80 & 29.75 & 196.00 \\
+GPU Memory (MB) & 13,994 & 14,077 & 14,590 & 14,343 & 18,906 \\
+\bottomrule
+\end{tabular}
+}
+\label{tab:efficiency}
+\end{table}
+
+
+% \begin{figure}[t]
+%   \centering
+%   \includegraphics[width=\linewidth]{figures/efficiency-with-shift.pdf}
+%   \caption{Latency and memory comparison on LLaVA-1.5. CALRD stays close 
+%   to vanilla decoding, while other methods incur higher overhead. 
+%   The inset zooms into the lower-left region. Lower is better for both axes.}
+%   \label{fig:efficiency}
+% \end{figure}
+
+
+\begin{table}[h]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}{ll|cc|cc}
+\toprule
+& & \multicolumn{2}{c|}{InstructBLIP} & \multicolumn{2}{c}{LLaVA-1.5} \\
+Decoding & Method & C$_S$$\downarrow$ & C$_I$$\downarrow$ & C$_S$$\downarrow$ & C$_I$$\downarrow$ \\
+\midrule
+\multirow{2}{*}{Greedy} 
+& SHIFT$^\dagger$ & 44.0 & 19.9 & 43.8 & 12.4 \\
+& CALRD & \textbf{40.2} & \textbf{14.6} &\textbf{ 35.7} & \textbf{10.3 }\\
+\midrule
+\multirow{2}{*}{Beam} 
+& SHIFT$^\dagger$ & 39.0 & 13.3 & 36.7 & \textbf{10.5} \\
+& CALRD & \textbf{38.4} & \textbf{11.4} &\textbf{ 34.7} & 10.9 \\
+\midrule
+\multirow{2}{*}{Nucleus} 
+& SHIFT$^\dagger$ & 47.0 & 19.3 & 42.0 & \textbf{11.6} \\
+& CALRD & \textbf{42.7} & \textbf{12.1} &\textbf{ 37.6} & 12.8 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Comparison with SHIFT on CHAIR benchmark. $\dagger$Results cited from \protect\cite{wang2025shift}. Experimental settings may differ.}
+\label{tab:shift_comparison}
+\end{table}
+
+
+
+\section{Evaluation Metrics}
+\label{appendix:metrics}
+
+We use the CHAIR (Caption Hallucination Assessment with Image Relevance) metric~\cite{Object_Hallucination} to evaluate object hallucination in generated captions. CHAIR compares mentioned objects against ground-truth annotations and reports two variants:
+
+\textbf{Sentence-level} ($C_S$): the fraction of generated sentences containing at least one hallucinated object:
+\begin{equation}
+C_S = \frac{|\{\text{sentences with hallucinated objects}\}|}{|\{\text{all sentences}\}|}
+\end{equation}
+
+\textbf{Instance-level} ($C_I$): the fraction of object mentions that are hallucinations:
+\begin{equation}
+C_I = \frac{|\{\text{hallucinated object mentions}\}|}{|\{\text{all object mentions}\}|}
+\end{equation}
+
+Lower values indicate fewer hallucinations.
+
+
+\section{Implementation Details}
+\label{appendix:implementation}
+
+All experiments are conducted on NVIDIA H100 GPUs. Default decoding settings are as follows:
+
+\noindent \textbf{Greedy decoding}: used by default unless otherwise specified
+
+\noindent \textbf{Beam search}: beam size = 5
+
+\noindent \textbf{Nucleus sampling}: $p = 0.9$, temperature $T = 1.0$
+
+
+For $L_{\mathrm{start}}$ detection, we use relative entropy drop rather than absolute thresholds, making the method robust across models with varying layer counts. Our code and the Conflict-VQA dataset will be publicly released upon publication.
+
+
+\section{Qualitative Examples}
+\label{appendix:case_study}
+
+Figures~\ref{fig:case1} and~\ref{fig:case2} show example outputs from InstructBLIP and LLaVA-1.5 on image captioning tasks. We compare baseline outputs with CALRD under three decoding strategies (greedy, beam search, nucleus sampling). Hallucinated content in baseline outputs is highlighted in red. These examples illustrate how CALRD reduces hallucinations across different models and decoding configurations.
+
+
+\begin{figure*}[ht]
+  \centering
+  \includegraphics[width=\linewidth]{figures/case study_部分1-cropped.pdf}
+  \caption{CALRD results on image captioning with InstructBLIP. We compare 
+outputs under greedy, beam search, and nucleus sampling. Hallucinated 
+content in baseline outputs is marked in red. }
+  \label{fig:case1}
+\end{figure*}
+
+
+\begin{figure*}[ht]
+  \centering
+  \includegraphics[width=\linewidth]{figures/case study_部分2-cropped.pdf}
+  \caption{CALRD results on image captioning with LLaVA-1.5. We compare 
+outputs under greedy, beam search, and nucleus sampling. Hallucinated 
+content in baseline outputs is marked in red.}
+  \label{fig:case2}
+\end{figure*}
+
+\end{revised}
+
+
+
+% We build Conflict-VQA by pairing images from VrR-VG with questions from TDIUC, 
+% matching by \texttt{image\_id}. We focus on six question types where 
+% visual--textual conflicts are unambiguous: object presence, color, attribute, 
+% counting, positional reasoning, and activity recognition. 
+% Figure~\ref{fig:data_example} shows an example from the dataset.
+
+% The scene graphs from VrR-VG require some cleanup before use. Object identifiers 
+% are often inconsistent: the same object may appear under different names or be 
+% split into multiple entries. We normalize these by mapping to canonical names 
+% and merging duplicates while preserving their counts and attributes. Relations 
+% are converted to readable \{\emph{subject}, \emph{predicate}, \emph{object}\} 
+% triples. After this processing, we have a structured representation of each 
+% scene that we can feed to GPT-4o for context generation, which helps keep the 
+% generated text grounded in actual scene elements.
+
+% For each question, we need two answers: $w_{\mathrm{vis}}$ (from the image) and 
+% $w_{\mathrm{text}}$ (from the conflicting context). The original dataset answer 
+% serves as $w_{\mathrm{vis}}$. We construct $w_{\mathrm{text}}$ based on question 
+% type: flipping yes/no for presence questions, swapping to a different value for 
+% property questions, or perturbing counts for counting questions. We discard cases 
+% where the alternative would be implausible.
+
+% We prompt GPT-4o to generate two contexts per sample. The prompt is shown 
+% in Figure~\ref{fig:prompt}. $C_{\mathrm{factual}}$ accurately describes the 
+% scene and supports $w_{\mathrm{vis}}$; $C_{\mathrm{conflict}}$ is nearly identical 
+% but introduces exactly one statement supporting $w_{\mathrm{text}}$ instead. Both 
+% are 3--5 sentences of natural prose, with no fabricated objects or hedging language. 
+
+% Two researchers independently performed quality checks on all samples, 
+% verifying that $C_{\mathrm{factual}}$ accurately described the image content, 
+% that $C_{\mathrm{conflict}}$ differed from $C_{\mathrm{factual}}$ only in the 
+% intended contradictory statement, and that both contexts were fluent and 
+% natural. Cases where the two reviewers disagreed were discussed until consensus 
+% was reached, resulting in approximately 8\% of the initial candidates being 
+% filtered out.
+
+% Table~\ref{tab:accuracy_relationship} reports three metrics. \emph{Non-conflict 
+% accuracy} measures baseline performance under $C_{\mathrm{factual}}$. 
+% \emph{Conflict accuracy} measures performance under $C_{\mathrm{conflict}}$; 
+% the gap between the two reflects how much the misleading context hurts. 
+% The \emph{competent ratio} is stricter: it requires a model to answer correctly 
+% in all five trials under $C_{\mathrm{factual}}$. We use this to filter 
+% model-specific subsets for the mechanistic analysis in \S3, 
+% ensuring that failures we study are due to conflict resolution rather than 
+% poor visual perception. The main evaluation in \S4 uses 
+% the full dataset.
+
+% \section{Algorithm}
+
+% Algorithm~\ref{alg:calrd} provides the complete pseudocode for CALRD. The algorithm operates at each decoding step, first locating the transition layer via entropy and JSD analysis (Stage 1), then computing the correction strength based on anchor confidence and prediction retention (Stage 2), and finally interpolating logits to produce the output distribution (Stage 3).
+
+% % \section{Additional Analysis}
+
+% \section{Understanding Late-Layer Override}
+% \label{appendix:override}
+
+% \subsection{A Representative Case}
+
+% We begin with a concrete example to illustrate the override phenomenon discussed in Section 3. Figure~\ref{fig:case_study} shows a failure case from LLaVA-1.6. The input image contains a yellow banana next to brown donuts on a white plate. The context, however, falsely states that the banana appears brown. When asked about the banana's color, the model outputs ``brown,'' ignoring what is clearly visible in the image.
+
+% Figure~\ref{fig:case_study}(a) traces the Modal Dominance Ratio across layers. MDR stays positive through early and middle layers, reaching its peak around layer 15. This indicates a clear preference for the visual answer during most of the forward pass. The picture changes after layer 21, marked as $L_{\text{trans}}$: MDR drops below zero and remains negative through the final layers. The model's preference has flipped from vision to text.
+
+% Figure~\ref{fig:case_study}(b) provides complementary evidence through token ranking. Throughout the shallow layers, ``yellow'' consistently outranks ``brown.'' By layers 19 to 21, ``yellow'' reaches rank 1, indicating that the model has encoded the correct answer and is ready to output it. However, this does not last. After $L_{\text{trans}}$, ``brown'' takes over the top position, while ``yellow'' falls to around rank 10. The correct answer was present in intermediate representations; it simply did not survive to the output.
+
+
+
+
+% This case captures the core pattern of our analysis: the failure is not one of perception but of preservation. The model saw the yellow banana, represented it correctly in its intermediate layers, and then let that information slip away. But what drives this behavior? We turn to this question next.
+
+% \subsection{Why Does Late-Layer Override Occur?}
+
+% A likely explanation lies in the asymmetry of how MLLMs are trained. The language model backbone sees far more text than image-text pairs during pretraining, and visual instruction tuning typically freezes the vision encoder while updating only the connector and LLM~\cite{llava-1.5,bai2025qwen2,bai2025qwen3vltechnicalreport}. As a result, the deeper layers, shaped primarily by text-only pretraining, retain strong linguistic priors.
+
+% Recent work on hallucination provides supporting evidence. Wang et al.~\cite{wang2024deco} find that MLLMs can recognize objects correctly in earlier layers, but this recognition gets suppressed by language priors in deeper layers. VisiPruner~\cite{fan2025visipruner} observes a similar pattern: cross-modal fusion peaks in middle layers, while deep layers shift toward linguistic processing. The banana example above fits this picture exactly: correct visual encoding in middle layers, followed by text-driven override in late layers.
+
+% Our results align with this view more broadly. The override occurs after the stability onset, where linguistic reasoning is thought to dominate~\cite{jiang2025devils}. Models with weaker visual grounding show larger gains from CALRD (Table 2), consistent with the idea that stronger text priors leave more room for override. We also find that the direction of prediction shifts matters: transitions toward text correlate with failures, while transitions toward vision correlate with successes (Section 3.3). This directional asymmetry is precisely what allows CALRD to intervene selectively, correcting harmful overrides while leaving beneficial refinements intact.
+
+
+% \paragraph{Distribution of Transition Layers.}
+% We look at where the detected $L_{\mathrm{trans}}$ falls across models. 
+% For each sample in the competent subset, we run CALRD and record the 
+% layer index where JSD peaks, then normalize by total model depth to 
+% allow comparison across architectures with different layer counts.
+
+% Figure~\ref{fig:ltrans_dist} shows the distributions. Across all five 
+% models, the distributions are concentrated rather than scattered. 
+% Standard deviations range from 6\% to 9\%, and over 80\% of samples 
+% fall within the 65\%--80\% depth range. This tells us that the 
+% transition phenomenon is not random but occurs in a predictable part 
+% of the network, and that our JSD-based detection reliably finds it.
+
+% Looking more closely, there is some variation across model families. 
+% InstructBLIP and the LLaVA models have mean $L_{\mathrm{trans}}$ around 
+% 70\%--73\% of depth, while the Qwen models sit slightly higher at 
+% 74\%--75\%. The gap is small but consistent. One possible reading is 
+% that stronger models preserve visual information further into the 
+% forward pass, so the transition occurs closer to the output. This 
+% would fit with the higher baseline accuracy we observe for these models.
+
+% \section{Additional Experiments}
+
+% \paragraph{Comparison with SHIFT.} 
+% SHIFT~\cite{wang2025shift} also leverages intermediate layers to reduce hallucinations. Since their code is not publicly available, we compare against the numbers reported in their paper. As shown in Table~\ref{tab:shift_comparison}, CALRD outperforms SHIFT in most configurations. We note that experimental setups differ between the two works, so this comparison should be interpreted with caution.
+
+% Figure~\ref{fig:efficiency} compares inference efficiency across methods. CALRD adds minimal overhead compared to vanilla, while VCD and OPERA are substantially slower due to their dual-stream computation 
+% and iterative rollback, respectively.
+
+
+% \section{Evaluation Metrics.}
+% CHAIR measures object hallucination in generated captions by comparing mentioned objects against ground-truth annotations. We report two metrics:
+% \begin{equation}
+% C_S = \frac{|\{\text{sentences with hallucinated objects}\}|}{|\{\text{all sentences}\}|}
+% \end{equation}
+% \begin{equation}
+% C_I = \frac{|\{\text{hallucinated object mentions}\}|}{|\{\text{all object mentions}\}|}
+% \end{equation}
+% Lower is better for both metrics.
+
+
+% \section{Implementation Details.}
+% All experiments run on NVIDIA H100 GPUs. We use greedy decoding by default unless otherwise specified. For beam search, we set beam size to 5. For nucleus sampling, we use $p=0.9$ and temperature $T=1.0$. The entropy threshold for $L_{\mathrm{start}}$ detection uses relative drop rather than absolute value, making it robust across models with different layer counts.
+
+% \section{Case Study}
+% \label{appendix:case_study}
+
+% Figures~\ref{fig:case1} and~\ref{fig:case2} 
+% show example outputs from InstructBLIP and LLaVA-1.5 on image captioning. 
+% Hallucinated content in baseline outputs is highlighted in red. CALRD 
+% reduces these errors across different decoding strategies.
+
+
+
+% \input{chapters/Appendix}
+
+
+
+
+
+
+\clearpage
+
+\bibliographystyle{named}
+\bibliography{ijcai26}
+
+\end{document}
+

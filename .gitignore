@@ -1,0 +1,17 @@
+logs/
+.agents/
+.codex
+.codex/
+**/.codex
+CODEX_FINAL.md
+CODEX_TEST.md
+PRD.md
+.DS_Store
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
