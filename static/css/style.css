@@ -376,20 +376,76 @@ img {
   width: min(100%, 980px);
 }
 
-.venue-badge {
+.conference-lockup {
+  position: relative;
+  isolation: isolate;
+  display: inline-grid;
+  grid-template-columns: auto auto auto;
+  gap: 1rem;
+  align-items: center;
+  margin: 0 0 1.35rem;
+  padding: 0.62rem 1rem;
+  border: 1px solid rgba(24, 35, 58, 0.12);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.62)) padding-box,
+    linear-gradient(120deg, rgba(200, 58, 0, 0.38), rgba(242, 169, 0, 0.38), rgba(49, 89, 217, 0.22)) border-box;
+  box-shadow: 0 18px 48px rgba(24, 35, 58, 0.12);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition: var(--transition);
+}
+
+.conference-lockup::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(120deg, rgba(200, 58, 0, 0.18), transparent 40%, rgba(49, 89, 217, 0.16));
+  opacity: 0;
+  transition: opacity 0.24s ease;
+}
+
+.conference-lockup:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 62px rgba(24, 35, 58, 0.16);
+}
+
+.conference-lockup:hover::before {
+  opacity: 1;
+}
+
+.conference-lockup img {
+  display: block;
+  width: 150px;
+  height: auto;
+  filter: drop-shadow(0 3px 6px rgba(24, 35, 58, 0.12));
+}
+
+.accepted-chip,
+.conference-meta {
   display: inline-flex;
   align-items: center;
+  min-height: 31px;
+  white-space: nowrap;
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.accepted-chip {
   gap: 7px;
-  margin: 0 0 1.25rem;
-  padding: 6px 17px;
+  padding: 5px 13px;
   border-radius: 999px;
   background: linear-gradient(135deg, var(--navy), #233a61);
   color: #fff;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  box-shadow: 0 8px 22px rgba(24, 35, 58, 0.18);
+  box-shadow: 0 8px 22px rgba(24, 35, 58, 0.16);
+}
+
+.conference-meta {
+  color: #536177;
 }
 
 .hero h1 {
@@ -1529,8 +1585,24 @@ img {
     padding: 2.9rem 1rem 2.8rem;
   }
 
-  .venue-badge {
-    font-size: 0.7rem;
+  .conference-lockup {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+    width: min(100%, 330px);
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius);
+  }
+
+  .conference-lockup img {
+    justify-self: center;
+    width: 156px;
+  }
+
+  .accepted-chip,
+  .conference-meta {
+    justify-self: center;
+    min-height: 28px;
+    font-size: 0.66rem;
   }
 
   .affiliations {
